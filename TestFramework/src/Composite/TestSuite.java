@@ -1,6 +1,5 @@
 package Composite;
 
-import Iterator.AbstractTestAggregate;
 import Iterator.AbstractTestIterator;
 import Iterator.TestSuiteIterator;
 import java.util.ArrayList;
@@ -10,7 +9,7 @@ import java.util.ArrayList;
 //		defines behavior for components having children. Stores child
 //		components. Implements child-related operations in the Component interface.
 //      Concrete Aggregate: A concrete implementation of the Aggregate interface
-public class TestSuite implements TestComponent, AbstractTestAggregate {
+public class TestSuite implements TestComponent {
     private String name;
     private ArrayList<TestComponent> tests = new ArrayList<>();  // List of test components
 
@@ -25,7 +24,17 @@ public class TestSuite implements TestComponent, AbstractTestAggregate {
     // Create an iterator for the tests in the suite
     @Override
     public AbstractTestIterator createIterator() {
-        return new TestSuiteIterator(tests);
+        return new TestSuiteIterator(this);
+    }
+
+    @Override
+    public int getCount() {
+        return tests.size();
+    }
+
+    @Override
+    public TestComponent get(int idx) {
+        return tests.get(idx);
     }
 
     // Add a test to the suite
@@ -34,17 +43,6 @@ public class TestSuite implements TestComponent, AbstractTestAggregate {
         tests.add(test);
     }
 
-    // Return the number of tests in the suite
-    @Override
-    public int getCount() {
-        return tests.size();
-    }
-
-    // Get a test by index
-    @Override
-    public TestComponent get(int idx) {
-        return tests.get(idx);
-    }
 
     // Remove a specific test from the suite
     @Override

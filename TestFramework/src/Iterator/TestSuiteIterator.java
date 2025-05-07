@@ -1,6 +1,7 @@
 package Iterator;
 
 import Composite.TestComponent;
+import Composite.TestSuite;
 
 import java.util.ArrayList;
 
@@ -8,10 +9,10 @@ import java.util.ArrayList;
 //      Implements the iterator interface for traversing a collection of TestComponents (TestCase or TestSuite).
 //      Provides sequential access to the elements in the TestSuite, keeping track of the current position.
 public class TestSuiteIterator implements AbstractTestIterator {
-    private ArrayList<TestComponent> components;
+    private TestSuite components;
     private int currentIndex = 0;
 
-    public TestSuiteIterator(ArrayList<TestComponent> components) {
+    public TestSuiteIterator(TestSuite components) {
         this.components = components;
     }
 
@@ -27,7 +28,7 @@ public class TestSuiteIterator implements AbstractTestIterator {
 
     @Override
     public boolean isDone() {
-        return currentIndex >= components.size();
+        return currentIndex >= components.getCount();
     }
 
     @Override
