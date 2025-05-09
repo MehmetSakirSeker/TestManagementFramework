@@ -11,3 +11,5 @@ public interface AbstractTestIterator {
     boolean isDone();
     TestComponent currentItem();
 }
+
+
