@@ -31,8 +31,8 @@ public class TestCase implements TestComponent {
 
     @Override
     public void execute() {
-        System.out.println("[RUNNING] " + name);
-
+        System.out.println("  -> [Executing TestCase] " + name);
+        System.out.println("     -> Result: PASSED");
     }
 
     @Override
@@ -42,7 +42,6 @@ public class TestCase implements TestComponent {
     }
     @Override
     public AbstractTestIterator createIterator() {
-        // Leaf should not create an iterator
         throw new UnsupportedOperationException("Leaf nodes do not support iterators");
     }
 
