@@ -1,7 +1,3 @@
-import Composite.TestComponent;
-import Composite.TestSuite;
-import Iterator.AbstractTestIterator;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,13 +41,13 @@ abstract class BaseTestCommand implements Command {
         AbstractTestIterator iterator = suite.createIterator();
         for (iterator.first(); !iterator.isDone(); iterator.next()) {
             TestComponent component = iterator.currentItem();
-            if (component.getName().contains(keyword)) {
-                if (component instanceof TestSuite) {
+            if (component.acceptFilter(keyword)) {
+                if (component.getCount() > 0) { // TestSuite ise
                     testRunner.runTestSuite((TestSuite) component);
-                } else {
+                } else { // TestCase ise
                     testRunner.runTest(component);
                 }
-            } else if (component instanceof TestSuite) {
+            } else if (component.getCount() > 0) {
                 filterAndRunTests((TestSuite) component, keyword);
             }
         }
@@ -105,9 +101,7 @@ class TestInvoker {
         }
         commands.clear();
     }
-    public List<Command> getCommands() {
-        return commands;
-    }
+
     public void clearCommands() {
         commands.clear();
     }

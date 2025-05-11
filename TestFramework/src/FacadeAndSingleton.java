@@ -1,6 +1,5 @@
-import Composite.TestComponent;
-import Composite.TestSuite;
-import Iterator.AbstractTestIterator;
+// CommandPattern sınıflarını import ediyoruz
+
 
 public class FacadeAndSingleton {
     private static FacadeAndSingleton instance;
@@ -12,47 +11,37 @@ public class FacadeAndSingleton {
         this.allTests = allTests;
     }
 
-    public static synchronized FacadeAndSingleton getInstance(TestSuite allTests) {
+    public static FacadeAndSingleton getInstance(TestSuite allTests) {
         if (instance == null) {
             instance = new FacadeAndSingleton(allTests);
         }
         return instance;
     }
 
-    public void runAllTests() {
-        System.out.println("=== Facade: Tüm Testler Çalıştırılıyor ===");
+    protected void runAllTests() {
+        System.out.println("=== Facade: All Tests Are Running ===");
         testRunner.runTestSuite(allTests);
     }
 
-    public void runGUITests() {
+    protected void runGUITests() {
         System.out.println("=== Facade: GUI Testleri Çalıştırılıyor ===");
         filterAndRunTests(allTests, "GUI");
     }
 
-    public void runNetworkTests() {
+    protected void runNetworkTests() {
         System.out.println("=== Facade: Network Testleri Çalıştırılıyor ===");
         filterAndRunTests(allTests, "Network");
     }
 
-    public void runTestsByKeyword(String keyword) {
-        System.out.println("=== Facade: '" + keyword + "' içeren Testler Çalıştırılıyor ===");
-        filterAndRunTests(allTests, keyword);
-    }
-
+    // Kod tekrarını önlemek için BaseTestCommand sınıfındaki filterAndRunTests metodunu kullanıyoruz
     protected void filterAndRunTests(TestSuite suite, String keyword) {
-        AbstractTestIterator iterator = suite.createIterator();
-        while (!iterator.isDone()) {
-            TestComponent component = iterator.currentItem();
-            if (component.getName().contains(keyword)) {
-                if (component instanceof TestSuite) {
-                    testRunner.runTestSuite((TestSuite) component);
-                } else {
-                    testRunner.runTest(component);
-                }
-            } else if (component instanceof TestSuite) {
-                filterAndRunTests((TestSuite) component, keyword);
+        // BaseTestCommand sınıfındaki metodu kullanmak için geçici bir komut oluşturuyoruz
+        BaseTestCommand command = new BaseTestCommand(suite, testRunner) {
+            @Override
+            public void execute() {
+                // Bu metot kullanılmayacak, sadece filterAndRunTests metodunu kullanmak için
             }
-            iterator.next();
-        }
+        };
+        command.filterAndRunTests(suite, keyword);
     }
 }

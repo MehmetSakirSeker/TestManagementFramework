@@ -1,14 +1,18 @@
-package Iterator;
+//      Iterator
+//      Defines the interface for traversing elements in the aggregate without exposing its internal structure.
+//      Provides methods to iterate over TestComponents in a sequence.
+interface AbstractTestIterator {
+    void first();
+    void next();
+    boolean isDone();
+    TestComponent currentItem();
+}
 
-import Composite.TestComponent;
-import Composite.TestSuite;
-
-import java.util.ArrayList;
 
 //      Concrete Iterator
 //      Implements the iterator interface for traversing a collection of TestComponents (TestCase or TestSuite).
 //      Provides sequential access to the elements in the TestSuite, keeping track of the current position.
-public class TestSuiteIterator implements AbstractTestIterator {
+ class TestSuiteIterator implements AbstractTestIterator {
     private TestSuite components;
     private int currentIndex = 0;
 
@@ -40,3 +44,14 @@ public class TestSuiteIterator implements AbstractTestIterator {
     }
 }
 
+
+
+//      Abstract Aggregate
+//      Defines the interface for creating and accessing an iterator for a collection of TestComponents.
+//      Provides methods for adding, retrieving, and counting TestComponents in the aggregate.
+interface AbstractTestAggregate {
+    AbstractTestIterator createIterator();
+    void add(TestComponent component);
+    int getCount();
+    TestComponent get(int idx);
+}

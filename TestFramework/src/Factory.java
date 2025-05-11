@@ -1,6 +1,3 @@
-import Composite.TestCase;
-import Composite.TestComponent;
-import Composite.TestSuite;
 import java.util.ArrayList;
 
 abstract class TestCreator{
@@ -74,7 +71,7 @@ class MacTestCreator extends TestCreator{
         return suite;
     }
 }
-/*
+
 class TestSystem {
     public static void main(String[] args) {
         TestCreator creator = new AixTestCreator();
@@ -89,4 +86,3 @@ class TestSystem {
         }
     }
 }
-*/
