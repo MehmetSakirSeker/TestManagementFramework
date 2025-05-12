@@ -1,28 +1,66 @@
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) {
-        // Test components factory (Factory Method)
-        TestCreator aixCreator = new AixTestCreator();
-        ArrayList<TestComponent> aixTests = aixCreator.createTest();
+    public static void main(String[] args) throws InterruptedException{
 
-        // Main test suite (Composite) that will contain all tests
+        TestCreator creator = new AixTestCreator();
+        ArrayList<TestComponent> tests = creator.createTest();
+
         TestSuite allTests = new TestSuite("All Tests");
-
-        System.out.println("=== Tests from the Factory Are Added to the Main Suite ===");
-        for (TestComponent test : aixTests) {
+        for (TestComponent test : tests) {
             allTests.add(test);
-            System.out.println("Added: " + test.getName());
         }
-        System.out.println();
 
-        // Single facade object to run tests (Singleton + Facade)
-        FacadeAndSingleton testFacade = FacadeAndSingleton.getInstance(allTests);
+        TestManager manager = TestManager.getInstance(allTests);
 
-        testFacade.runAllTests();         // Run all tests
-        System.out.println("\n--- Only GUI Tests ---");
-        testFacade.runGUITests();         // Run only GUI tests
-        System.out.println("\n--- Only Network Tests ---");
-        testFacade.runNetworkTests();     // Run only Network tests
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Which test do you want to run?");
+        System.out.println("1 - All Tests");
+        System.out.println("2 - GUI Tests");
+        System.out.println("3 - Network Tests");
+        System.out.println("4 - Run all tests every monday");
+        int choice = scanner.nextInt();
+
+        switch (choice) {
+            case 1 -> manager.runAllTests();
+            case 2 -> manager.runGUITests();
+            case 3 -> manager.runNetworkTests();
+            case 4 -> {
+
+                System.out.println("Project Leader, please choose which tests to run on monday automatically:");
+                System.out.println("1 - All Tests");
+                System.out.println("2 - GUI Tests");
+                System.out.println("3 - Network Tests");
+                int subChoice = scanner.nextInt();
+
+                testOnMonday(DayOfWeek.MONDAY, 1000);
+                switch (subChoice) {
+                    case 1 -> manager.runAllTests();
+                    case 2 -> manager.runGUITests();
+                    case 3 -> manager.runNetworkTests();
+                    default -> System.out.println("Invalid choice.");
+                }
+            }
+            default -> System.out.println("Invalid choice.");
+        }
+
+        scanner.close();
+    }
+
+    public static void testOnMonday(DayOfWeek targetDay, int millisPerDay) throws InterruptedException {
+
+        DayOfWeek today = LocalDate.now().getDayOfWeek();
+
+        while (today != targetDay) {
+            System.out.println("Today is " + today + ". Waiting for " + targetDay + "...");
+            Thread.sleep(millisPerDay);
+            today = today.plus(1);
+        }
+
+        System.out.println("It's " + targetDay + "! Running tests now...");
     }
 }
+
