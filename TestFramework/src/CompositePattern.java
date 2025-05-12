@@ -17,27 +17,33 @@ class TestCase implements TestComponent {
         return name;
     }
 
+    //Override without doing any implementation
     @Override
     public void add(TestComponent test) {
         System.out.println("Cannot add to a TestCase(Leaf).");
     }
 
+    //Override without doing any implementation
     @Override
     public void remove(TestComponent test) {
         System.out.println("Cannot remove from a TestCase(Leaf).");
     }
 
+    //Executing the test and see the results
     @Override
     public void execute() {
         System.out.println("  -> [Executing TestCase] " + name);
         System.out.println("     -> Result: PASSED");
     }
 
+    // Show test name with dashes
     @Override
     public void display(int indent) {
         for (int i = 0; i < indent; i++) System.out.print("-");
         System.out.println(" TestCase: " + name);
     }
+
+    //Override without doing any implementation
     @Override
     public AbstractTestIterator createIterator() {
         throw new UnsupportedOperationException("Leaf nodes do not support iterators");
@@ -48,20 +54,21 @@ class TestCase implements TestComponent {
     public int getCount() {
         return 0;
     }
-    
+
+    //Override without doing any implementation
     @Override
     public TestComponent get(int idx) {
         throw new UnsupportedOperationException("Leaf nodes do not have children");
     }
-    
+
     @Override
     public boolean acceptFilter(String keyword) {
-        // Eğer test adı anahtar kelimeyi içeriyorsa true döndür
+        // If the test name contains the keyword it returns true
         return name.contains(keyword);
     }
 }
 
-//      This is the "Component".
+//      This is the "Component". *Transparent*
 //		Declares the interface for objects in the composition. Implements
 //      default behavior for the interface common to all classes, as
 //      appropriate. declares an interface for accessing and managing its
@@ -74,7 +81,7 @@ interface TestComponent extends AbstractTestAggregate {
     void display(int indent);
     String getName();
 
-    // Visitor pattern metodu - OCP'ye uygun olarak tip kontrolü yapmak için
+    //Method for identifying the test case or test suite
     boolean acceptFilter(String keyword);
 }
 
@@ -84,17 +91,17 @@ interface TestComponent extends AbstractTestAggregate {
 //      Concrete Aggregate: A concrete implementation of the Aggregate interface
 class TestSuite implements TestComponent {
     private String name;
-    private ArrayList<TestComponent> tests = new ArrayList<>();  // List of test components
+    private ArrayList<TestComponent> tests = new ArrayList<>();
 
     public TestSuite(String name) {
-        this.name = name;  // Set the name of the test suite
+        this.name = name;
     }
 
     public String getName() {
         return name;
     }
 
-    // Create an iterator for the tests in the suite
+    // Create an iterator for the tests for the test suite
     @Override
     public AbstractTestIterator createIterator() {
         return new TestSuiteIterator(this);
@@ -144,7 +151,7 @@ class TestSuite implements TestComponent {
 
     @Override
     public boolean acceptFilter(String keyword) {
-        // TestSuite'in adı anahtar kelimeyi içeriyorsa true döndür
+        // If the test suite's name contains the keyword it returns true
         return name.contains(keyword);
     }
 }

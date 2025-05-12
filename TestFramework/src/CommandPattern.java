@@ -1,61 +1,69 @@
 import java.util.ArrayList;
 import java.util.List;
 
-// Command arayüzü
+// All commands will implement this command interface.
 interface Command {
     void execute();
 }
 
-// Receiver
+// This class runs tests basically "Receiver".
 class TestRunner {
+    // This runs one test case.
     public void runTest(TestComponent testComponent) {
         System.out.println("[RUNNING] " + testComponent.getName());
         testComponent.execute();
     }
 
+    // This runs a group of test cases (a test suite).
     public void runTestSuite(TestSuite suite) {
         System.out.println("[SUITE] " + suite.getName());
         AbstractTestIterator iterator = suite.createIterator();
         for (iterator.first(); !iterator.isDone(); iterator.next()) {
             TestComponent testComponent = iterator.currentItem();
             if (testComponent instanceof TestSuite) {
+                // If it's a test suite, run it again
                 runTestSuite((TestSuite) testComponent);
             } else {
+                // If it's a single test, just run it
                 runTest(testComponent);
             }
         }
     }
 }
 
-// Base Command
+// This is an abstract class for test commands to filter the tests based on its type such as GUI or Network.
 abstract class BaseTestCommand implements Command {
-    protected TestSuite testSuite;
-    protected TestRunner testRunner;
+    protected TestSuite testSuite;       // Group of tests
+    protected TestRunner testRunner;     // Who runs the tests
 
+    // Constructor
     public BaseTestCommand(TestSuite testSuite, TestRunner testRunner) {
         this.testSuite = testSuite;
         this.testRunner = testRunner;
     }
 
+    // This method finds and runs test cases with a keyword like GUI or Network
     protected void filterAndRunTests(TestSuite suite, String keyword) {
         AbstractTestIterator iterator = suite.createIterator();
         for (iterator.first(); !iterator.isDone(); iterator.next()) {
             TestComponent component = iterator.currentItem();
+
+            // If the test matches the keyword
             if (component.acceptFilter(keyword)) {
-                if (component.getCount() > 0) { // TestSuite ise
+                if (component.getCount() > 0) { // It is a TestSuite
                     testRunner.runTestSuite((TestSuite) component);
-                } else { // TestCase ise
+                } else { // It is a TestCase
                     testRunner.runTest(component);
                 }
             } else if (component.getCount() > 0) {
+                // Keep looking inside this suite
                 filterAndRunTests((TestSuite) component, keyword);
             }
         }
     }
-
 }
 
-// Concrete Commands
+// This command runs all tests not filtering it based on its type
 class RunAllTestsCommand extends BaseTestCommand {
     public RunAllTestsCommand(TestSuite testSuite, TestRunner testRunner) {
         super(testSuite, testRunner);
@@ -66,6 +74,7 @@ class RunAllTestsCommand extends BaseTestCommand {
     }
 }
 
+// This command runs only GUI tests
 class RunGUITestsCommand extends BaseTestCommand {
     public RunGUITestsCommand(TestSuite testSuite, TestRunner testRunner) {
         super(testSuite, testRunner);
@@ -76,6 +85,7 @@ class RunGUITestsCommand extends BaseTestCommand {
     }
 }
 
+// This command runs only Network tests
 class RunNetworkTestsCommand extends BaseTestCommand {
     public RunNetworkTestsCommand(TestSuite testSuite, TestRunner testRunner) {
         super(testSuite, testRunner);
@@ -84,24 +94,26 @@ class RunNetworkTestsCommand extends BaseTestCommand {
     public void execute() {
         filterAndRunTests(testSuite, "Network");
     }
-
 }
 
-// Invoker
+// This is the "Invoker". It stores and runs commands.
 class TestInvoker {
     private List<Command> commands = new ArrayList<>();
 
+    // Add a new command
     public void addCommand(Command command) {
         commands.add(command);
     }
 
+    // Run all commands
     public void runTests() {
         for (Command command : commands) {
             command.execute();
         }
-        commands.clear();
+        commands.clear(); // Clear after running
     }
 
+    // Remove all commands without running
     public void clearCommands() {
         commands.clear();
     }
