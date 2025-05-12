@@ -2,9 +2,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 // All commands will implement this command interface.
-interface Command {
-    void execute();
-}
+
 
 // This class runs tests basically "Receiver".
 class TestRunner {
@@ -32,7 +30,7 @@ class TestRunner {
 }
 
 // This is an abstract class for test commands to filter the tests based on its type such as GUI or Network.
-abstract class BaseTestCommand implements Command {
+abstract class BaseTestCommand {
     protected TestSuite testSuite;       // Group of tests
     protected TestRunner testRunner;     // Who runs the tests
 
@@ -41,6 +39,7 @@ abstract class BaseTestCommand implements Command {
         this.testSuite = testSuite;
         this.testRunner = testRunner;
     }
+    public abstract void execute();
 
     // This method finds and runs test cases with a keyword like GUI or Network
     protected void filterAndRunTests(TestSuite suite, String keyword) {
@@ -98,16 +97,16 @@ class RunNetworkTestsCommand extends BaseTestCommand {
 
 // This is the "Invoker". It stores and runs commands.
 class TestInvoker {
-    private List<Command> commands = new ArrayList<>();
+    private List<BaseTestCommand> commands = new ArrayList<>();
 
     // Add a new command
-    public void addCommand(Command command) {
+    public void addCommand(BaseTestCommand command) {
         commands.add(command);
     }
 
     // Run all commands
     public void runTests() {
-        for (Command command : commands) {
+        for (BaseTestCommand command : commands) {
             command.execute();
         }
         commands.clear(); // Clear after running

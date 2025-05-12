@@ -5,7 +5,6 @@ import java.util.ArrayList;
 // Defines a template for creating different types of tests.
 // Subclasses will implement the actual creation of specific test cases and suites.
 abstract class TestCreator {
-
     private ArrayList<TestComponent> testComponents;
 
     // Factory Methods to be implemented by subclasses
@@ -27,7 +26,6 @@ abstract class TestCreator {
 
 // Concrete implementation of TestCreator for the Aix platform
 class AixTestCreator extends TestCreator {
-
     // Returns a single GUI test case
     @Override
     public TestComponent createGUITestCase() {
@@ -43,7 +41,6 @@ class AixTestCreator extends TestCreator {
         suite.add(new TestCase("Aix GUI - Menu Test"));
         return suite;
     }
-
     // Returns a single network test case
     @Override
     public TestComponent createNetworkTestCase() {
@@ -63,7 +60,6 @@ class AixTestCreator extends TestCreator {
 
 // Concrete implementation of TestCreator for the Mac platform
 class MacTestCreator extends TestCreator {
-
     // Returns a single GUI test case
     @Override
     public TestComponent createGUITestCase() {
@@ -79,7 +75,6 @@ class MacTestCreator extends TestCreator {
         suite.add(new TestCase("Mac GUI – Retina Display Adjustment Test"));
         return suite;
     }
-
     // Returns a single network test case
     @Override
     public TestComponent createNetworkTestCase() {
