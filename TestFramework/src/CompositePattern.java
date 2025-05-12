@@ -17,6 +17,12 @@ class TestCase implements TestComponent {
         return name;
     }
 
+    //Policy approach test are responsible for its own execution
+    @Override
+    public void run(TestRunner runner) {
+        runner.runTest(this);
+    }
+
     //Override without doing any implementation
     @Override
     public void add(TestComponent test) {
@@ -80,6 +86,7 @@ interface TestComponent extends AbstractTestAggregate {
     void execute();
     void display(int indent);
     String getName();
+    void run(TestRunner runner);
 
     //Method for identifying the test case or test suite
     boolean acceptFilter(String keyword);
@@ -99,6 +106,17 @@ class TestSuite implements TestComponent {
 
     public String getName() {
         return name;
+    }
+
+    //Policy approach for running test suites(Test suites have the responsibility for its own running )
+    @Override
+    public void run(TestRunner runner) {
+        System.out.println("[SUITE] " + getName());
+        AbstractTestIterator iterator = createIterator();
+        for (iterator.first(); !iterator.isDone(); iterator.next()) {
+            TestComponent component = iterator.currentItem();
+            component.run(runner);
+        }
     }
 
     // Create an iterator for the tests for the test suite

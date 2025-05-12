@@ -14,18 +14,7 @@ class TestRunner {
 
     // This runs a group of test cases (a test suite).
     public void runTestSuite(TestSuite suite) {
-        System.out.println("[SUITE] " + suite.getName());
-        AbstractTestIterator iterator = suite.createIterator();
-        for (iterator.first(); !iterator.isDone(); iterator.next()) {
-            TestComponent testComponent = iterator.currentItem();
-            if (testComponent instanceof TestSuite) {
-                // If it's a test suite, run it again
-                runTestSuite((TestSuite) testComponent);
-            } else {
-                // If it's a single test, just run it
-                runTest(testComponent);
-            }
-        }
+        suite.run(this);
     }
 }
 
