@@ -40,7 +40,6 @@ abstract class BaseTestCommand {
         this.testRunner = testRunner;
     }
     public abstract void execute();
-
     // This method finds and runs test cases with a keyword like GUI or Network
     protected void filterAndRunTests(TestSuite suite, String keyword) {
         AbstractTestIterator iterator = suite.createIterator();
