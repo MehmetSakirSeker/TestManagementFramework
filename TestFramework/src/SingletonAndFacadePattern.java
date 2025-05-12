@@ -1,5 +1,5 @@
 class TestManager {
-    private static TestManager instance;  // The one and only instance (Singleton)
+    private static TestManager instance;  // The one and only instance (Singleton) lazy instantiation
     private TestRunner testRunner;               // Helps to run tests
     private TestSuite allTests;
 
@@ -26,8 +26,9 @@ class TestManager {
         checkin.checkInCode();
 
         System.out.println("=== Facade: All Tests Are Running ===");
-        BaseTestCommand command = new RunAllTestsCommand(allTests, testRunner);
-        command.execute();
+        TestInvoker invoker = new TestInvoker();
+        invoker.addCommand(new RunAllTestsCommand(allTests, testRunner));
+        invoker.runTests();
 
         reporter.generateReport();
     }
@@ -39,9 +40,9 @@ class TestManager {
 
         System.out.println("=== Facade: GUI Tests Are Running ===");
 
-        BaseTestCommand command = new RunGUITestsCommand(allTests, testRunner);
-        command.execute();
-
+        TestInvoker invoker = new TestInvoker();
+        invoker.addCommand(new RunGUITestsCommand(allTests, testRunner));
+        invoker.runTests();
         reporter.generateReport();
     }
 
@@ -51,8 +52,9 @@ class TestManager {
         checkin.checkInCode();
 
         System.out.println("=== Facade: Network Tests Are Running ===");
-        BaseTestCommand command = new RunNetworkTestsCommand(allTests, testRunner);
-        command.execute();
+        TestInvoker invoker = new TestInvoker();
+        invoker.addCommand(new RunNetworkTestsCommand(allTests, testRunner));
+        invoker.runTests();
 
         reporter.generateReport();
     }
