@@ -3,7 +3,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Main {
+public class TestSystemLauncher {
     public static void main(String[] args) throws InterruptedException {
 
         // Create a test creator instance (using Factory Method Pattern)

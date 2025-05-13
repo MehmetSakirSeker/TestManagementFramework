@@ -3,13 +3,16 @@ class TestManager {
     private TestRunner testRunner;               // Helps to run tests
     private TestSuite allTests;
 
-    private final CheckinManager checkin = new CheckinManager();
-    private final ReportGenerator reporter = new ReportGenerator();
+    private final CheckinManager checkin;
+    private final ReportGenerator reporter;
 
     // Private constructor to prevent direct creation of the object
     private TestManager(TestSuite allTests) {
         this.testRunner = new TestRunner();
         this.allTests = allTests;
+
+        checkin = new CheckinManager();
+        reporter = new ReportGenerator();
     }
 
     // Singleton method: returns the single instance (creates it if needed)
@@ -19,10 +22,8 @@ class TestManager {
         }
         return instance;
     }
-
     // Facade method: runs all tests
     public void runAllTests() {
-
         checkin.checkInCode();
 
         System.out.println("=== Facade: All Tests Are Running ===");
@@ -32,10 +33,8 @@ class TestManager {
 
         reporter.generateReport();
     }
-
     // Facade method: runs only GUI-related tests
     public void runGUITests() {
-
         checkin.checkInCode();
 
         System.out.println("=== Facade: GUI Tests Are Running ===");
@@ -45,10 +44,8 @@ class TestManager {
         invoker.runTests();
         reporter.generateReport();
     }
-
     // Facade method: runs only Network-related tests
     public void runNetworkTests() {
-
         checkin.checkInCode();
 
         System.out.println("=== Facade: Network Tests Are Running ===");
