@@ -3,7 +3,8 @@ import java.util.ArrayList;
 
 //      Leaf Class
 //		represents leaf objects in the composition. A leaf has no children.
-//	    Defines behavior for primitive objects in the composition.(Due to the safer way usage, addTest and removeTest does not included
+//	    Defines behavior for primitive objects in the composition.(Due to the safer way usage,
+//	    addTest and removeTest does not included
 //      in the Lead(TestCase) class.
 //      Concrete Aggregate because of test component transparent not safe
 class TestCase implements TestComponent {
